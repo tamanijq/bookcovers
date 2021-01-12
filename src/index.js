@@ -14,16 +14,16 @@ async function fetchImages(isbn, options = {}) {
   const isbnVariants = isbnData.isIsbn10
     ? [isbnData.toIsbn10(), isbnData.toIsbn13()]
     : [isbnData.toIsbn13(), isbnData.toIsbn10()];
-  const getWithService = service => service
-    .get(isbnVariants[0])
+  const getWithService = (service, serviceName) => service
+    .get(isbnVariants[0], options[serviceName])
     .then(res => res || service.get(isbnVariants[1]))
     .catch(printFailure);
   if (options.type) {
     return {
-      [options.type]: await getWithService(services[options.type])
+      [options.type]: await getWithService(services[options.type], options.type)
     };
   }
-  const results = await Promise.all(Object.values(services).map(getWithService));
+  const results = await Promise.all(Object.keys(services).map(name => getWithService(services[name], name)));
   return Object.keys(services).reduce((accum, key, i) => ({
     ...accum,
     [key]: results[i]

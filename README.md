@@ -24,6 +24,23 @@ bookcovers
   .then(results => ...);
 ```
 
+With scrapping options:
+
+```js
+const bookcovers = require("bookcovers");
+
+const options = {
+  amazon: { /* options for puppeter.launch(options) */ },
+  google: { /* options for request(url, options) */ },
+  openLibrary: { /* options for request(url, options) */ },
+  type: 'amazon|google|openLibrary' /* for doing request to single provider */
+}
+
+bookcovers
+  .withIsbn("9781570273148", options)
+  .then(results => ...);
+```
+
 As a cli:
 
 ```bash
@@ -66,3 +83,6 @@ Returns a promise that resolves to an object containing urls from each of the so
 
 ### Options
 - `type` - Specify a service: `'amazon' | 'google' | 'openLibrary'`. Default: `null` (all).
+- `amazon` - Specify options for puppeteer scrapper of amazon
+- `google` - Specify options for request scrapper of google
+- `openLibrary` - Specify options for request scrapper of openLibrary
